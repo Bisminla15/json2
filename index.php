@@ -7,7 +7,7 @@
     <title>Document</title>
 
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-    
+
 </head>
 <body>
 <button id="btnBack"> back </button>
@@ -15,7 +15,7 @@
     <table>
         <thead>
             <tr>
-                <th>ID</th> <th>Title</th><th> Details </th>
+                <th> ID </th><th> Title </th><th> Details </th>
             </tr>
         </thead>
         <tbody id="tblPosts">
@@ -26,12 +26,28 @@
     <table>
         <thead>
             <tr>
-                <th>ID</th> <th>Title</th><th> userId</th>
+                <th> ID </th><th> Title </th><th> userId </th>
             </tr>
         </thead>
         <tbody id="tblDetails">
         </tbody>
     </table> 
+</div>
+<button id="btnComments"> comment </button>
+<div id="comment">
+    <table>
+        <thead>
+            <tr>
+                <th> postId </th>
+                <th> ID </th>
+                <th> Name </th>
+                <th> email </th>
+                <th> body </th>
+            </tr>
+        </thead>
+        <thead id="tblComments">
+        </thead>
+    </table>
 </div>
 </body>
 <script>
@@ -42,7 +58,7 @@
         $.getJSON(url)
             .done((data)=>{
                 console.log(data);
-                var line = "<tr id='rowdetail'";
+                var line = "<tr id='rowdetail'>";
                         line += "<td>"+ data.id + "</td>";
                         line += "<td><b>"+ data.title + "</b><br/>";
                         line += data.body + "</td>";
@@ -76,12 +92,41 @@
 
             })
     }
+    function showComments(id){
+        $("#main").hide();
+        $("#detail").show();
+        S("#comment").show();
+        var url = "https://jsonplaceholder.typicode.com/posts/comments"+id;
+        $.getJSON(url)
+            .done((data)=>{
+                console.log(data);
+                var line = "<tr id='rowcomment'>";
+                        line += "<td>"+ data.postId + "</td>";
+                        line += "<td>"+ data.id + "</td>";
+                        line += "<td>"+ data.name + "</td>";
+                        line += "<td>"+ data.email + "</td>";
+                        line += "<td>"+ data.body + "</td>";
+                        line += "</tr>";
+                    $("#tblComments").append(line);           
+            })
+            .fail((xhr, status, error)=>{
+
+            })
+    }
     $(()=>{
         loadPosts();
         $("#btnBack").click(()=>{
             $("#main").show();
             $("#detail").hide();
             $("#rowdetail").remove();
+        });
+    })
+    $(()=>{
+        loadComments();
+        $("#btnComment").click(()=>{
+            $("#main").show();
+            $("#detail").hide();
+            $("#rowcomment").remove();
         });
     })
 </script>
